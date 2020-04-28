@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Retrofit</string>
+    <string name="wait_text">Espere…</string>
+    <string name="error_text">Error: %s</string>
+    <string name="button_get_by_id">Get Post 3</string>
+    <string name="button_get_all_posts">Get All Posts</string>
+    <string name="button_get_all_users">Get All Users</string>
 </resources>

@@ -1,13 +1,11 @@
 package com.fortatic.apps.retrofit
 
-import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,57 +25,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getPostById(postId: Int) {
-        Api.retrofitService.getPostById(postId).enqueue(object : Callback<Post> {
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.d("AFRC", "onFailure: ${t.message}")
+        CoroutineScope(Dispatchers.Main).launch {
+            val postIdDeferred = Api.retrofitService.getPostByIdAsync(postId)
+            try {
+                tvResult.text = getString(R.string.wait_text)
+                val post = postIdDeferred.await()
+                tvResult.text = post.toString()
+            } catch (e: Exception) {
+                tvResult.text = getString(R.string.error_text, e.message)
             }
-
-            override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                Log.d("AFRC", "onResponse: ${response.body()}")
-                if (response.isSuccessful) {
-                    tvResult.text = ""
-                    response.body()?.let {
-                        tvResult.text = it.toString()
-                    }
-                }
-            }
-        })
+        }
     }
 
     private fun getAllPosts() {
-        Api.retrofitService.getAllPosts().enqueue(object : Callback<List<Post>> {
-            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                Log.d("AFRC", "onFailure: ${t.message}")
+        CoroutineScope(Dispatchers.Main).launch {
+            val postsDeferred = Api.retrofitService.getAllPostsAsync()
+            try {
+                tvResult.text = getString(R.string.wait_text)
+                val postList = postsDeferred.await()
+                tvResult.text = postList.toString()
+            } catch (e: Exception) {
+                tvResult.text = getString(R.string.error_text, e.message)
             }
-
-            @SuppressLint("SetTextI18n")
-            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
-                if (response.isSuccessful) {
-                    tvResult.text = ""
-                    response.body()?.forEach {
-                        tvResult.text = "${tvResult.text}\n\r${it}"
-                    }
-                }
-            }
-        })
+        }
     }
 
     private fun getAllUsers() {
-        Api.retrofitService.getAllUsers().enqueue(object : Callback<List<User>> {
-            override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                Log.d("AFRC", "onFailure: ${t.message}")
+        CoroutineScope(Dispatchers.Main).launch {
+            val usersDeferred = Api.retrofitService.getAllUsersAsync()
+            try {
+                tvResult.text = getString(R.string.wait_text)
+                val userList = usersDeferred.await()
+                tvResult.text = userList.toString()
+            } catch (e: Exception) {
+                tvResult.text = getString(R.string.error_text, e.message)
             }
-
-            @SuppressLint("SetTextI18n")
-            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-                if (response.isSuccessful) {
-                    tvResult.text = ""
-                    response.body()?.forEach {
-                        // \n\r nos da el salto de linea.
-                        tvResult.text = "${tvResult.text}\n\r${it.name}"
-                    }
-                }
-            }
-        })
+        }
     }
 }
