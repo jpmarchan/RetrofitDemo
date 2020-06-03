@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getPostById(postId: Int) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val postIdDeferred = Api.retrofitService.getPostByIdAsync(postId)
             try {
                 tvResult.text = getString(R.string.wait_text)
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAllPosts() {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val postsDeferred = Api.retrofitService.getAllPostsAsync()
             try {
                 tvResult.text = getString(R.string.wait_text)
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAllUsers() {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val usersDeferred = Api.retrofitService.getAllUsersAsync()
             try {
                 tvResult.text = getString(R.string.wait_text)

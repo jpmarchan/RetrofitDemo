@@ -20,12 +20,13 @@ private val retrofit = Builder()
     .baseUrl(BASE_URL)
     .build()
 
-//Aquí vamos a definir los métodos abstractos.
-/*
- * Aquí cambiamos todas las llamadas Call<> por Deferred<> para retornar una coroutina
- * y manejar los errores y exitos dentro de la misma sin usar callbacks.
+/**
+ * Definimos los métodos abstractos.
+ *
+ * Aquí cambiamos todas las llamadas Call<> por Deferred<> para retornar un Job.
  */
 interface ApiService {
+
     @GET("posts")
     fun getAllPostsAsync(): Deferred<List<Post>>
 
