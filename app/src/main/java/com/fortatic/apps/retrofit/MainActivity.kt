@@ -26,40 +26,37 @@ class MainActivity : AppCompatActivity() {
 
     private fun getPostById(postId: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            val postIdDeferred = Api.retrofitService.getPostByIdAsync(postId)
-            try {
-                tvResult.text = getString(R.string.wait_text)
-                val post = postIdDeferred.await()
-                tvResult.text = post.toString()
-            } catch (e: Exception) {
-                tvResult.text = getString(R.string.error_text, e.message)
+            tvResult.text = getString(R.string.wait_text)
+            val postReceived = try {
+                Api.retrofitService.getPostById(postId)
+            } catch (error: Exception) {
+                getString(R.string.error_text, error.message)
             }
+            tvResult.text = postReceived.toString()
         }
     }
 
     private fun getAllPosts() {
         CoroutineScope(Dispatchers.IO).launch {
-            val postsDeferred = Api.retrofitService.getAllPostsAsync()
-            try {
-                tvResult.text = getString(R.string.wait_text)
-                val postList = postsDeferred.await()
-                tvResult.text = postList.toString()
-            } catch (e: Exception) {
-                tvResult.text = getString(R.string.error_text, e.message)
+            tvResult.text = getString(R.string.wait_text)
+            val postsReceived = try {
+                Api.retrofitService.getAllPosts()
+            } catch (error: Exception) {
+                getString(R.string.error_text, error.message)
             }
+            tvResult.text = postsReceived.toString()
         }
     }
 
     private fun getAllUsers() {
         CoroutineScope(Dispatchers.IO).launch {
-            val usersDeferred = Api.retrofitService.getAllUsersAsync()
-            try {
-                tvResult.text = getString(R.string.wait_text)
-                val userList = usersDeferred.await()
-                tvResult.text = userList.toString()
-            } catch (e: Exception) {
-                tvResult.text = getString(R.string.error_text, e.message)
+            tvResult.text = getString(R.string.wait_text)
+            val usersReceived = try {
+                Api.retrofitService.getAllUsers()
+            } catch (error: Exception) {
+                getString(R.string.error_text, error.message)
             }
+            tvResult.text = usersReceived.toString()
         }
     }
 }

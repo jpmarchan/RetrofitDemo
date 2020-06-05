@@ -1,7 +1,6 @@
 package com.fortatic.apps.retrofit
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit.Builder
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -28,13 +27,13 @@ private val retrofit = Builder()
 interface ApiService {
 
     @GET("posts")
-    fun getAllPostsAsync(): Deferred<List<Post>>
+    suspend fun getAllPosts(): List<Post>
 
     @GET("posts/{id}")
-    fun getPostByIdAsync(@Path("id") id: Int): Deferred<Post>
+    suspend fun getPostById(@Path("id") id: Int): Post
 
     @GET("users")
-    fun getAllUsersAsync(): Deferred<List<User>>
+    suspend fun getAllUsers(): List<User>
 }
 
 //El Object UserApi se encargará de instanciar un objeto Retrofit (aplicando el patrón de diseño Singleton)
