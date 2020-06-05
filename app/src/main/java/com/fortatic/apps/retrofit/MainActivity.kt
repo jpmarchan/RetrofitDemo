@@ -15,28 +15,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnGetPostById.setOnClickListener {
-            getPostById(3)
+        btnGetCommentById.setOnClickListener {
+            getCommentById(3)
         }
-        btnGetAllPosts.setOnClickListener {
-            getAllPosts()
+        btnGetAllComments.setOnClickListener {
+            getAllComments()
         }
         btnGetAllUsers.setOnClickListener {
             getAllUsers()
         }
     }
 
-    private fun getPostById(postId: Int) {
-        Api.retrofitService.getPostById(postId).enqueue(object : Callback<Post> {
-            override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.d("AFRC", "onFailure: ${t.message}")
+    private fun getCommentById(commentId: Int) {
+        Api.retrofitService.getCommentById(commentId).enqueue(object : Callback<Comment> {
+            override fun onFailure(call: Call<Comment>, error: Throwable) {
+                Log.d("FATAL", "onFailure: ${error.message}")
             }
 
-            override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                Log.d("AFRC", "onResponse: ${response.body()}")
+            override fun onResponse(call: Call<Comment>, response: Response<Comment>) {
+                //Verificamos que la respuesta sea exitosa.
                 if (response.isSuccessful) {
-                    tvResult.text = ""
-                    response.body()?.let {
+                    //Almacenamos el comment recuperado en una variable
+                    val comment = response.body()
+                    //Solo si la variable no es nulla, la mostramos en el TextView.
+                    comment?.let {
                         tvResult.text = it.toString()
                     }
                 }
@@ -44,18 +46,24 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun getAllPosts() {
-        Api.retrofitService.getAllPosts().enqueue(object : Callback<List<Post>> {
-            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                Log.d("AFRC", "onFailure: ${t.message}")
+    private fun getAllComments() {
+        Api.retrofitService.getAllComments().enqueue(object : Callback<List<Comment>> {
+            override fun onFailure(call: Call<List<Comment>>, error: Throwable) {
+                Log.d("FATAL", "onFailure: ${error.message}")
             }
 
             @SuppressLint("SetTextI18n")
-            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
+            override fun onResponse(call: Call<List<Comment>>, response: Response<List<Comment>>) {
+                //Verificamos que la respuesta sea exitosa.
                 if (response.isSuccessful) {
+                    //Almacenamos la lista recuperada en la variable commentsList.
+                    val commentsList = response.body()
+                    //Limpiamos el textView
                     tvResult.text = ""
-                    response.body()?.forEach {
-                        tvResult.text = "${tvResult.text}\n\r${it}"
+                    //Solo si la variable commentsList no es nula, la recorremos.
+                    commentsList?.forEach { comment ->
+                        // \n\r nos da el salto de linea.
+                        tvResult.text = "${tvResult.text}\n\r $comment"
                     }
                 }
             }
@@ -64,17 +72,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun getAllUsers() {
         Api.retrofitService.getAllUsers().enqueue(object : Callback<List<User>> {
-            override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                Log.d("AFRC", "onFailure: ${t.message}")
+            override fun onFailure(call: Call<List<User>>, error: Throwable) {
+                Log.d("FATAL", "onFailure: ${error.message}")
             }
 
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+                //Verificamos que la respuesta sea exitosa.
                 if (response.isSuccessful) {
+                    //Almacenamos la lista recuperada en la variable userList.
+                    val userList = response.body()
+                    //Limpiamos el textView
                     tvResult.text = ""
-                    response.body()?.forEach {
+                    //Solo si la variable userList no es nula, la recorremos.
+                    userList?.forEach { user ->
                         // \n\r nos da el salto de linea.
-                        tvResult.text = "${tvResult.text}\n\r${it.name}"
+                        tvResult.text = "${tvResult.text}\n\r $user"
                     }
                 }
             }

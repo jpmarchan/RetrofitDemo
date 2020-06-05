@@ -8,7 +8,7 @@ import retrofit2.http.Path
 
 private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
-/*
+/**
  * Retrofit necesita al menos dos cosas para construir una API
  *  - Una Fabrica de convertidores para Serializar/Deserializar objetos
  *  - Un BASE_URL del Servicio Web
@@ -21,16 +21,19 @@ private val retrofit = Builder()
 //Aquí vamos a definir los métodos abstractos.
 interface ApiService {
     @GET("posts")
-    fun getAllPosts(): Call<List<Post>>
+    fun getAllComments(): Call<List<Comment>>
 
     @GET("posts/{id}")
-    fun getPostById(@Path("id") id: Int): Call<Post>
+    fun getCommentById(@Path("id") id: Int): Call<Comment>
 
     @GET("users")
     fun getAllUsers(): Call<List<User>>
 }
 
-//El Object UserApi se encargará de instanciar un objeto Retrofit (aplicando el patrón de diseño Singleton)
+/**
+ * El Object UserApi se encargará de instanciar un objeto Retrofit
+ * (aplicando el patrón de diseño Singleton)
+ */
 object Api {
     val retrofitService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
