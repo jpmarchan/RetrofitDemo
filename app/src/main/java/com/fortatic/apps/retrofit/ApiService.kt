@@ -1,6 +1,5 @@
 package com.fortatic.apps.retrofit
 
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit.Builder
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -8,14 +7,13 @@ import retrofit2.http.Path
 
 private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
-/*
+/**
  * Retrofit necesita al menos dos cosas para construir una API
  *  - Una Fabrica de convertidores para Serializar/Deserializar objetos
  *  - Un BASE_URL del Servicio Web
  */
 private val retrofit = Builder()
     .addConverterFactory(GsonConverterFactory.create()) //El convertidor le dice a Retrofit que hacer con los datos que trae de la WS
-    .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .baseUrl(BASE_URL)
     .build()
 
@@ -36,7 +34,10 @@ interface ApiService {
     suspend fun getAllUsers(): List<User>
 }
 
-//El Object UserApi se encargará de instanciar un objeto Retrofit (aplicando el patrón de diseño Singleton)
+/**
+ * El Object UserApi se encargará de instanciar un objeto Retrofit
+ * (aplicando el patrón de diseño Singleton)
+ */
 object Api {
     val retrofitService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
